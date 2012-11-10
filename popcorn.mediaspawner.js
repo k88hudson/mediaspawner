@@ -158,8 +158,21 @@
             }
           }
 
-          // for TV archive -- switch the /details/ page url to the download .mp4 
+          // for TV archive -- switch the /details/ page url to the download .mp4
+          var origUrl = options.source;
           options.source = 'http://archive.org/download/'+iaid+'/'+iaid+'.mp4' + startend;
+
+          // Get the item metadata from archive.org for the given item/identifier.
+          // This allows us to find the best video/audio file to play!
+          // When we have the JSON in hand, call "init()".
+          var metaurl="http://archive.org/metadata/"+iaid+"?&callback=jsonp";
+          Popcorn.getJSONP( metaurl, function( itemMetadata ){
+            createAttribution({
+              //eg: "PBS NewsHour : KQEH : October 24, 2012 12:00am-1:00am PDT"
+              name : itemMetadata.metadata.title,
+              url : origUrl
+            });
+          });
         }
         else {
           // if the regex didn't return anything we know it's an HTML5 source
