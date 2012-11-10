@@ -22,6 +22,7 @@
 (function ( Popcorn, global ) {
   var PLAYER_URL = "http://popcornjs.org/code/modules/player/popcorn.player.js",
       urlRegex = /(?:http:\/\/www\.|http:\/\/|www\.|\.|^)(youtu)/,
+      urlRegexIA = /archive\.org\/(details)\/([^\/\#\?]+)[\?\#]*(.)/,
       forEachPlayer,
       playerTypeLoading = {},
       playerTypesLoaded = {
@@ -137,8 +138,33 @@
         }
       }
       else {
-        // if the regex didn't return anything we know it's an HTML5 source
-        mediaType = "HTML5";
+        regexResult = urlRegexIA.exec( options.source );
+        if ( regexResult ) {
+          mediaType = "HTML5";
+
+          var iaid = regexResult[ 2 ];
+          var startend = '';
+          if ( regexResult.length == 3 ) {
+            var qs   = regexResult[ 3 ];
+            var start=0, end=0;
+            var tmp = qs.match(/start[\/=]([\d\.]+)/);
+            if (tmp  &&  tmp.length==2)
+              start=tmp[1];
+            tmp = qs.match(/end[\/=]([\d\.]+)/);
+            if (tmp  &&  tmp.length==2)
+              end=tmp[1];
+            if (start  ||  end){
+              startend = '?start='+start + (end ? '&end='+end : '');
+            }
+          }
+
+          // for TV archive -- switch the /details/ page url to the download .mp4 
+          options.source = 'http://archive.org/download/'+iaid+'/'+iaid+'.mp4' + startend;
+        }
+        else {
+          // if the regex didn't return anything we know it's an HTML5 source
+          mediaType = "HTML5";
+        }
       }
 
       // Store Reference to Type for use in end
