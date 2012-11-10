@@ -146,6 +146,18 @@
 
       options._target = target = Popcorn.dom.find( options.target );
 
+      function onAttributionClick() {
+        this.classList.toggle( "on" );
+      }
+
+      function createAttribution( data ) {
+        var attributionContainer = document.createElement( "div" );
+        attributionContainer.classList.add( "media-spawner-attribution" );
+        attributionContainer.innerHTML = data.name + " " + data.url;
+        attributionContainer.addEventListener( "click", onAttributionClick, false );
+        container.appendChild( attributionContainer );
+      }
+
       // Create separate container for plugin
       options._container = document.createElement( "div" );
       container = options._container;
@@ -166,6 +178,11 @@
       container.style.left = options.left + "%";
 
       target && target.appendChild( container );
+      createAttribution({
+        name: "Test",
+        url: options.source
+      });
+
 
       function constructMedia(){
 
