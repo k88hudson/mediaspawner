@@ -144,7 +144,7 @@
 
           var iaid = regexResult[ 2 ];
           var startend = '';
-          if ( regexResult.length == 3 ) {
+          if ( regexResult.length == 4 ) {
             var qs   = regexResult[ 3 ];
             var start=0, end=0;
             var tmp = qs.match(/start[\/=]([\d\.]+)/);
