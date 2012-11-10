@@ -22,7 +22,7 @@
 (function ( Popcorn, global ) {
   var PLAYER_URL = "http://popcornjs.org/code/modules/player/popcorn.player.js",
       urlRegex = /(?:http:\/\/www\.|http:\/\/|www\.|\.|^)(youtu)/,
-      urlRegexIA = /archive\.org\/(details)\/([^\/\#\?]+)[\?\#]*(.)/,
+      urlRegexIA = /archive\.org\/(details)\/([^\/\#\?]+)[\?\#]*(.+)$/,
       forEachPlayer,
       playerTypeLoading = {},
       playerTypesLoaded = {
@@ -142,10 +142,10 @@
         if ( regexResult ) {
           mediaType = "HTML5";
 
-          var iaid = regexResult[ 1 ];
+          var iaid = regexResult[ 2 ];
           var startend = '';
           if ( regexResult.length == 3 ) {
-            var qs   = regexResult[ 2 ];
+            var qs   = regexResult[ 3 ];
             var start=0, end=0;
             var tmp = qs.match(/start[\/=]([\d\.]+)/);
             if (tmp  &&  tmp.length==2)
